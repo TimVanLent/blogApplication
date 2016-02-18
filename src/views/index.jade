@@ -1,0 +1,28 @@
+html
+	head
+		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+	body
+		if user
+			h5(style='float:right ; padding-right:30px')= message
+			p aqwefwqefqwef
+			h2 fqefqwefwqf
+			h6 qwfqefqwe
+
+			a(href='/logout') don't logout
+		else
+			h3 login
+			form.loginForm(action = '/login' method='post')
+				input#username(placeholder='username' name='username')
+				input#password(placeholder='password' name='password')
+				input.loginButton(type='submit' value='login' class='loginButton')
+			h3 or.. register 
+			form.registerForm(action = '/register' method='post')
+				input#addUser(placeholder='pick a username' name='addUser')
+				input#addPass(placeholder='choose your password' name='addPass')
+				input#addEmail(placeholder='give us your emailadress' name='addEmail')
+				input.registerButton(type='submit' value='register' class='registerButton')
+			br
+			h2= message
+	script.
+
+		
