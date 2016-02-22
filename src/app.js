@@ -17,6 +17,21 @@ var User = sequelize.define('user', {
 	email: Sequelize.STRING
 });
 
+var Blog = sequelize.define('blog', {
+	title: Sequelize.STRING,
+	body: Sequelize.TEXT,
+});
+
+var Comment = sequelize.define('comment', {
+	comment: Sequelize.TEXT,
+}, {
+	timestamps: true
+});
+
+Blog.hasMany(Comment);
+Comment.belongsTo(User);
+User.hasMany(Blog);
+
 var app = express();
 
 app.use(session({
@@ -28,16 +43,55 @@ app.use(session({
 app.set('views', './src/views');
 app.set('view engine', 'jade');
 
-app.get('/', function (req, res) {
-	res.render('index', {
-		message: req.query.message,
-		user: req.session.user
-	})
-});
+app.get('/', function(req, res) {
+	Promise.all([ //
+		Blog.findAll(),
+		Comment.findAll(),
+		User.findAll()
+	]).then(function(entities) {
 
-app.get('/logout', function (req, res) {
-	req.session.destroy(function(error){
-		if(error) {
+		var blogs = entities[0].map(function(row) {
+
+			return {
+				id: row.dataValues.id,
+				body: row.dataValues.body,
+				title: row.dataValues.title,
+				userId: row.dataValues.userId
+			};
+		});
+
+		// var comments = entities[1].map(function (row) {
+		// 	var blogId = blog.find
+		// 	return {
+		// 		id: row.dataValues.id,
+		// 		comment: row.dataValues.comment,
+		// 		blogId : blog.id,
+		// 		userId : row.dataValues.userId
+		// 	};
+		// });
+
+		var users = entities[2].map(function(row) {
+			return {
+				id: row.dataValues.id,
+				username: row.dataValues.username,
+				email: row.dataValues.email,
+				password: row.dataValues.password
+			};
+		});
+
+		res.render('index', {
+			blogs: blogs,
+			users: users,
+			// comments : comments,
+			message: req.query.message,
+
+			user: req.session.user
+		});
+	});
+});
+app.get('/logout', function(req, res) {
+	req.session.destroy(function(error) {
+		if (error) {
 			throw error;
 		}
 		res.redirect('/?message=' + encodeURIComponent("Successfully logged out."));
@@ -45,40 +99,105 @@ app.get('/logout', function (req, res) {
 });
 
 app.post('/login', bodyParser.urlencoded({
-extended: true
-}),
+		extended: true
+	}),
 	function(req, res) {
 		console.log("finding");
 		User.findOne({
-		where: {
-			username: req.body.username,
-			password: req.body.password
-		}
-	}).then(function (user){
-		if(req.body.password === user.password){
-			req.session.user = user;
-			res.redirect('/?message=' + encodeURIComponent("logged in as " + req.body.username))
-			console.log(user.dataValues);			
-		}
+			where: {
+				username: req.body.username,
+				password: req.body.password
+			}
+		}).then(function(user) {
+			if (req.body.password === user.password) {
+				req.session.user = user;
+				res.redirect('/?message=' + encodeURIComponent("logged in as " + req.body.username))
+				console.log(user.dataValues);
+			}
+		});
+	});
+
+app.post('/register', bodyParser.urlencoded({
+	extended: true
+}), function(req, res) {
+	console.log("registering user :");
+
+	User.create({
+
+		username: req.body.addUser,
+		password: req.body.addPass,
+		email: req.body.addEmail
+
+	}).then(function(user) {
+
+		res.redirect('/?message=' + encodeURIComponent("Sup " + req.body.addUser));
+	});
+});
+//----------------------------------------------------------
+app.post('/blogs', bodyParser.urlencoded({
+	extended: true
+}), function(req, res) {
+
+	Blog.create({
+		title: req.body.title,
+		body: req.body.body,
+		userId: req.session.user.id
+	}).then(function(rows) {
+		console.log(rows.dataValues)
+		res.redirect('/');
 	});
 });
 
-app.post('/register', bodyParser.urlencoded({ extended: true }), function(req, res) {
-	console.log("registering user :");
-	sequelize.sync({force: true}).then(function() {
-		User.create({
 
-					username: req.body.addUser,
-					password: req.body.addPass,
-					email: req.body.addEmail		
-				
-				}).then(function (user){
-					
-					res.redirect('/?message=' + encodeURIComponent("Sup " + req.body.addUser));
-			});
-		}); 
+app.get('/:blogId', function(req, res) {
+	if (req.session.user != undefined) {
+		var blogID = req.params.blogId;
+		console.log('blogID:' + blogID)
+		Blog.findById(blogID)
+			.then(Comment.findAll({
+					where: {
+						blogId: blogID
+					}
+				}).then(function(comments) {
+					console.log(comments)
+					var comments = comments.map(function(row) {
+						return {
+							id: row.dataValues.id,
+							comment: row.dataValues.comment,
+						}
+					})
+				}).then(function() {
+					res.redirect('/', {
+						blogID: blogID,
+						// comments: comments
+					})
+				}));
+		} else {
+			res.redirect('/')
+		}
 });
 
+
+app.post('/comment', bodyParser.urlencoded({
+	extended: true
+}), function(req, res) {
+
+
+	Comment.create({
+		comment: req.body.comment,
+		userId: req.session.user.id
+	}).then(function(rows) {
+		console.log(req.body.idee)
+		console.log(rows.dataValues)
+		res.redirect('/');
+	});
+});
+
+
+sequelize.sync({
+	force: false
+}).then(function() {
 	var server = app.listen(3000, function() {
 		console.log('Example app listening on port: ' + server.address().port);
 	});
+})
