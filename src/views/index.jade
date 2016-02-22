@@ -9,7 +9,7 @@ html
 				- var bonkie = blogId.toString
 				p(id=blog.title)= blog.title
 				p(id=blog.body)= blog.body
-					a(href="/"+blog.id)= blog.title + " - " + blog.userId
+					a(href="/blog/"+blog.id)= blog.title + " - " + blog.userId
 					br
 					
 			a(href='/logout') don't logout

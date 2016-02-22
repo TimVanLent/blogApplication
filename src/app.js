@@ -43,6 +43,35 @@ app.use(session({
 app.set('views', './src/views');
 app.set('view engine', 'jade');
 
+
+// app.get('/blog/:blogId', function(req, res) {
+// 	if (req.session.user != undefined) {
+// 		var blogID = req.params.blogId;
+// 		console.log('blogID:' + blogID)
+// 		Blog.findById(blogID)
+// 			.then(Comment.findAll({
+// 					where: {
+// 						blogId: blogID
+// 					}
+// 				}).then(function(comments) {
+// 					console.log(comments)
+// 					var comments = comments.map(function(row) {
+// 						return {
+// 							id: row.dataValues.id,
+// 							comment: row.dataValues.comment,
+// 						}
+// 					})
+// 				}).then(function() {
+// 					res.redirect('/', {
+// 						blogID: blogID,
+// 						// comments: comments
+// 					})
+// 				}));
+// 		} else {
+// 			res.redirect('/')
+// 		}
+// });
+
 app.get('/', function(req, res) {
 	Promise.all([ //
 		Blog.findAll(),
@@ -59,16 +88,6 @@ app.get('/', function(req, res) {
 				userId: row.dataValues.userId
 			};
 		});
-
-		// var comments = entities[1].map(function (row) {
-		// 	var blogId = blog.find
-		// 	return {
-		// 		id: row.dataValues.id,
-		// 		comment: row.dataValues.comment,
-		// 		blogId : blog.id,
-		// 		userId : row.dataValues.userId
-		// 	};
-		// });
 
 		var users = entities[2].map(function(row) {
 			return {
@@ -89,6 +108,70 @@ app.get('/', function(req, res) {
 		});
 	});
 });
+
+app.get('/blog/:blogId', function(req, res) {
+	Promise.all([ //
+		Blog.findAll(),
+		Comment.findAll(),
+		User.findAll()
+	]).then(function(entities) {
+
+		var blogs = entities[0].map(function(row) {
+
+			return {
+				id: row.dataValues.id,
+				body: row.dataValues.body,
+				title: row.dataValues.title,
+				userId: row.dataValues.userId,
+			};
+
+		});
+		console.log(blogs);	
+		blogID = req.params.blogId;
+		console.log('blogID:' + blogID)
+		
+		var comments = []
+		Blog.findById(blogID).then(Comment.findAll({
+				where: {
+					blogId: blogID
+				}
+			}).then(function(comments) {
+
+				var data = entities[1].map(function(row) {
+					return {
+						id: row.dataValues.id,
+						comment: row.dataValues.comment
+					}
+
+				})
+				comments.push(data);
+				console.log('comments innerfunction')
+				console.log(comments);
+				if(comments.length === 0){
+					comments = ['no comments']
+					console.log(comments)
+				}
+			}));
+		var users = entities[2].map(function(row) {
+			return {
+				id: row.dataValues.id,
+				username: row.dataValues.username,
+				email: row.dataValues.email,
+				password: row.dataValues.password
+			};
+		});
+		console.log('rendering:')
+		res.render('blog', {
+			blogs: blogs,
+			users: users,
+			comments: comments,
+			message: req.query.message,
+			user: req.session.user,
+			blogId : blogID
+		});
+	});
+});
+
 app.get('/logout', function(req, res) {
 	req.session.destroy(function(error) {
 		if (error) {
@@ -149,47 +232,17 @@ app.post('/blogs', bodyParser.urlencoded({
 });
 
 
-app.get('/:blogId', function(req, res) {
-	if (req.session.user != undefined) {
-		var blogID = req.params.blogId;
-		console.log('blogID:' + blogID)
-		Blog.findById(blogID)
-			.then(Comment.findAll({
-					where: {
-						blogId: blogID
-					}
-				}).then(function(comments) {
-					console.log(comments)
-					var comments = comments.map(function(row) {
-						return {
-							id: row.dataValues.id,
-							comment: row.dataValues.comment,
-						}
-					})
-				}).then(function() {
-					res.redirect('/', {
-						blogID: blogID,
-						// comments: comments
-					})
-				}));
-		} else {
-			res.redirect('/')
-		}
-});
-
 
 app.post('/comment', bodyParser.urlencoded({
 	extended: true
 }), function(req, res) {
-
-
 	Comment.create({
 		comment: req.body.comment,
-		userId: req.session.user.id
+		userId: req.session.user.id,
+		blogId: blogID
 	}).then(function(rows) {
-		console.log(req.body.idee)
 		console.log(rows.dataValues)
-		res.redirect('/');
+		res.redirect('/blog/' + blogID);
 	});
 });
 
