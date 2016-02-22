@@ -4,11 +4,20 @@ html
 	body
 		if user
 			h5(style='float:right ; padding-right:30px')= message
-			p aqwefwqefqwef
-			h2 fqefqwefwqf
-			h6 qwfqefqwe
-
+			each blog in blogs
+				- var blogId = blog.id
+				- var bonkie = blogId.toString
+				p(id=blog.title)= blog.title
+				p(id=blog.body)= blog.body
+					a(href="/"+blog.id)= blog.title + " - " + blog.userId
+					br
+					
 			a(href='/logout') don't logout
+
+			form(action = '/blogs' method='post')
+				input#title(placeholder='title' name='title')
+				input#body(placeholder='body' name='body')
+				input(type='submit' value='post' class='postButton')
 		else
 			h3 login
 			form.loginForm(action = '/login' method='post')
@@ -24,5 +33,9 @@ html
 			br
 			h2= message
 	script.
+		$(document).ready(function(){
+			var test = $('#10').text();
+			console.log(test);
+		})
 
 		
