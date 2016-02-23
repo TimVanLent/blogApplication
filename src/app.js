@@ -126,32 +126,32 @@ app.get('/blog/:blogId', function(req, res) {
 			};
 
 		});
-		console.log(blogs);	
+		console.log(blogs);
 		blogID = req.params.blogId;
 		console.log('blogID:' + blogID)
-		
+
 		var comments = []
 		Blog.findById(blogID).then(Comment.findAll({
-				where: {
-					blogId: blogID
+			where: {
+				blogId: blogID
+			}
+		}).then(function(commentaar) {
+			var data = entities[1].map(function(row) {
+				return {
+					id: row.dataValues.id,
+					comment: row.dataValues.comment
 				}
-			}).then(function(comments) {
 
-				var data = entities[1].map(function(row) {
-					return {
-						id: row.dataValues.id,
-						comment: row.dataValues.comment
-					}
-
-				})
-				comments.push(data);
+			})
+				comments = data.reverse();
 				console.log('comments innerfunction')
 				console.log(comments);
-				if(comments.length === 0){
-					comments = ['no comments']
-					console.log(comments)
-				}
-			}));
+			if (comments.length === 0) {
+				comments = ['no comments']
+				console.log(comments)
+			}
+
+		}));
 		var users = entities[2].map(function(row) {
 			return {
 				id: row.dataValues.id,
@@ -160,14 +160,17 @@ app.get('/blog/:blogId', function(req, res) {
 				password: row.dataValues.password
 			};
 		});
-		console.log('rendering:')
+		console.log('comments:');
+		console.log(comments);
+		console.log('rendering:');
+
 		res.render('blog', {
 			blogs: blogs,
 			users: users,
 			comments: comments,
 			message: req.query.message,
 			user: req.session.user,
-			blogId : blogID
+			blogId: blogID
 		});
 	});
 });
