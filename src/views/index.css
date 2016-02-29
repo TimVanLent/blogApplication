@@ -1,0 +1,126 @@
+
+.class{
+background-image: radial-gradient(49% 214%, rgba(214,186,142,0.49) 50%, #000000 100%);
+
+}
+
+
+#logout {
+/*	border: 1px solid red;*/
+	float:right;
+}
+
+#ref {
+	float:right;
+}
+
+
+#loginText {
+	color: #C6BBBB;
+	font-style: italic;
+}
+#registerText {
+	color: #514444;
+	font-style: italic;
+}
+h5, h3, h2, h4, p, a {
+	color : #514444;
+	/*color : #337AB7 !important;*/
+	font-family: "Times New Roman", Times, serif;	
+   
+}
+
+input:focus ,h5:focus, h3:focus, h2:focus, p:focus, a:focus {
+    outline:none !important;
+}
+.active.col-md-2 {
+	float: right;
+	text-align: right;
+	height: 100%;
+}
+
+.nav {
+	background-image: linear-gradient(-180deg, rgba(214,186,142,0.84) 82%, #720D0D 98%);
+	color : #514444 !important;
+	position: fixed;
+	width: 100%;
+	z-index: 1;
+	height: 80px;
+	box-shadow:15px 15px 10px #000000;
+}
+.grid{
+	top: 120px;
+}
+.col-md-5.col-sm-6.col-xs-12, .col-md-4.col-sm-6.col-xs-12,.col-md-2.col-sm-6.col-xs-12{
+	top: 120px;
+	padding:20px;
+	margin:15px; 
+	background-color: rgb(249, 255, 242);
+	border-radius: 8px;
+	box-shadow:15px 15px 10px #000000;
+	background-image: linear-gradient(0deg, rgba(214,186,142,0.49) 49%, #720D0D 58%);
+}
+.titleSubmit{
+	width:130px;
+}
+.bodySubmit{
+	width:100%;
+	height:300px;
+}
+form{
+	padding:20px;
+}
+
+#logout {
+
+}
+.hiThere, .punt {
+	right: -100px;
+	position: absolute;
+	margin-top: 300px;
+	font-style: italic;
+}
+.logReg{
+/*	background-color: #E4C8C8 !important;*/
+	border-radius: 8px;
+	/*margin-top: 100px;*/
+	width: 300px;
+	padding:20px;
+	top:-500px;
+	left:35%;
+	opacity: 80%;
+	position: absolute;
+	box-shadow:15px 15px 10px #888888;
+
+background-image: linear-gradient(0deg, rgba(214,186,142,0.49) 49%, #720D0D 58%);
+}
+
+input {
+	border-radius: 8px;
+	-webkit-appearance: none;
+}
+textarea{
+	border-radius: 8px;
+	-webkit-appearance: none;
+}
+input select {
+	border-radius: 8px !important;
+	-webkit-appearance: none;
+}
+.post.container-fluid {
+	background-color:rgba(156, 208, 220, 0.28);
+	/*padding: 0 0 0 0 !important;*/
+
+}
+.containerFluid1 {
+	background-color: #fff;
+	padding:10px;
+}
+.well {
+	padding:0px !important;
+
+}
+body {
+background-image: radial-gradient(49% 214%, rgba(214,186,142,0.49) 50%, #000000 100%) !important;
+background-image: radial-gradient(49% 214%, rgba(214,186,142,0.49) 50%, #000000 100%) !important;
+}
