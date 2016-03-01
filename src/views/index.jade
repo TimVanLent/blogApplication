@@ -1,28 +1,100 @@
+doctype html
 html
 	head
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+		script(src='//code.jquery.com/ui/1.11.4/jquery-ui.js')
+		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', integrity='sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7', crossorigin='anonymous')
+		link(rel='stylesheet', href='/index.css', type='text/css')
+
 	body
 		if user
-			h5(style='float:right ; padding-right:30px')= message
-			p aqwefwqefqwef
-			h2 fqefqwefwqf
-			h6 qwfqefqwe
-
-			a(href='/logout') don't logout
+			.nav( role="navigation" )
+				.navbar-header.col-md-2
+					h5.head sup dude
+				.active.col-md-8
+					a#logout(href='/logout')
+						h5.head don't log out	
+				.active.col-md-2
+					h5.head logged in as #{user.username}
+			.grid.container
+				.row
+					.col-md-5.col-sm-6.col-xs-12
+						.col-md-12
+							h3#blogText write a message!
+							form(action = '/blogs' method='post')
+								input#title(placeholder='title' name='title')
+								input.bodySubmit(placeholder='body' name='body')
+								input.titleSubmit(type='submit' value='post' class='postButton')
+						.col-md-12
+							h3#mineText my messages
+							each blog in blogs
+								if(blog.userId == user.username)
+									.well
+										.post.container-fluid
+											a(id= blog.id, href="/blog/" + blog.id + '#' + blog.id) 
+												h4= blog.title	
+											h5(class='blogbody')= blog.body
+											h6#ref= " - " + blog.userId
+											br
+					.col-md-4.col-sm-6.col-xs-12
+						h3#activityText latest Post..
+						.well
+							.post.container-fluid
+								a(id= blogs[0].id + "latest", href="/blog/" + blogs[0].id + '#' + blogs[0].id + "latest") 
+										h5= blogs[0].title
+									h5(class='blogbody')= blogs[0].body
+									h6#ref= " - " + blogs[0].userId
+									br
+						h3#otherText not my messages..
+						each blog in blogs
+							if(blog.userId !== user.username && blog.id !== 18)
+								.well
+									.post.container-fluid
+										a(id= blog.id, href="/blog/" + blog.id + '#' + blog.id) 
+											h5= blog.title
+										h5(class= 'blogbody')= blog.body
+										h6#ref= " - " + blog.userId
+										br
+					.col-md-2.col-sm-6.col-xs-12
+						h3#listText Bloglist
+						br
+						each blog in blogs
+							- var x = '#' + blog.id
+							a(class='blogbody', href= "/blog/" + blog.id + x)
+								h5= blog.title
+								h6#ref= " - " + blog.userId
+								br
 		else
-			h3 login
-			form.loginForm(action = '/login' method='post')
-				input#username(placeholder='username' name='username')
-				input#password(placeholder='password' name='password')
-				input.loginButton(type='submit' value='login' class='loginButton')
-			h3 or.. register 
-			form.registerForm(action = '/register' method='post')
-				input#addUser(placeholder='pick a username' name='addUser')
-				input#addPass(placeholder='choose your password' name='addPass')
-				input#addEmail(placeholder='give us your emailadress' name='addEmail')
-				input.registerButton(type='submit' value='register' class='registerButton')
-			br
-			h2= message
+			.logReg
+				h3#loginText login
+				form#loginForm(action = '/login' method='post')
+					input#username(placeholder='username' name='username')
+					input#password(placeholder='password' type='password' name='password')
+					input.loginButton(type='submit' value='login' class='loginButton')
+				h3#registerText or.. register 
+				form.registerForm(action = '/register' method='post')
+					input#addUser(placeholder='pick a username' name='addUser')
+					input#addPass(placeholder='choose your password' name='addPass' type='password')
+					input#addEmail(placeholder='give us your emailadress' name='addEmail')
+					input.registerButton(type='submit' value='register' class='registerButton')
+				br
+			.holder
+				.hiThere
+					h2#hiThere Hi there	
+				.punt
+					h2#punt .
+				.logMessage
+					h2= message		
 	script.
+		$(document).ready(function(){
+				$(".logReg").animate({top: '20%'}, 2000, "easeInOutBack");
+				
+				$(".hiThere").delay(3000).animate({right: '32%'}, 3700, 'easeOutQuart');
+				
+				$(".punt").delay(4000).animate({top: '36.4%'}, 4100, "easeOutBounce");
 
+				$(".logMessage").animate({left: '32%'}, 3700, 'easeOutQuart');
+
+			})
+		
 		
