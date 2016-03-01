@@ -1,7 +1,13 @@
+body {
+background-image: radial-gradient(49% 214%, rgba(214,186,142,0.49) 50%, #000000 100%);*/
+background-color: #C6BBBB;
+border-radius: 8px;
 
-.class{
-background-image: radial-gradient(49% 214%, rgba(214,186,142,0.49) 50%, #000000 100%);
+}
 
+#list0, #list1, #list2, #list3, #list4, #list5, #list6 {
+	color: #C6BBBB !important;
+	text-shadow:0 1px 1px #000000 !important;
 }
 
 
@@ -14,21 +20,37 @@ background-image: radial-gradient(49% 214%, rgba(214,186,142,0.49) 50%, #000000 
 	float:right;
 }
 
+.hiThere {
+	right: -100px;
+	position: absolute;
+	font-style: italic;
+	top: 36.4%;
+}
+
+.punt {
+	right:31%;
+	top: -100px;
+	position: absolute;
+
+	font-style: italic;
+}
+
 
 #loginText {
-	color: #C6BBBB;
+
 	font-style: italic;
 }
 #registerText {
-	color: #514444;
+
 	font-style: italic;
 }
-h5, h3, h2, h4, p, a {
-	color : #514444;
-	/*color : #337AB7 !important;*/
-	font-family: "Times New Roman", Times, serif;	
+
+.blogbody, #ref,#blogText, #activityText, #listText, #otherText, #mineText, h5, h3, h2, h4, p, a {
+	text-shadow: 0 1px 1px #fff;
+	font-family: "Times New Roman", Times, serif;
    
 }
+
 
 input:focus ,h5:focus, h3:focus, h2:focus, p:focus, a:focus {
     outline:none !important;
@@ -41,12 +63,18 @@ input:focus ,h5:focus, h3:focus, h2:focus, p:focus, a:focus {
 
 .nav {
 	background-image: linear-gradient(-180deg, rgba(214,186,142,0.84) 82%, #720D0D 98%);
-	color : #514444 !important;
+	text-shadow: 0 1px 1px #fff;
+	font-family: "Times New Roman", Times, serif;
 	position: fixed;
 	width: 100%;
 	z-index: 1;
+	font-size: 33px;
 	height: 80px;
-	box-shadow:15px 15px 10px #000000;
+	text-shadow:0 1px 1px #000000;
+}
+
+.head {
+	font-size: 20px;
 }
 .grid{
 	top: 120px;
@@ -55,10 +83,9 @@ input:focus ,h5:focus, h3:focus, h2:focus, p:focus, a:focus {
 	top: 120px;
 	padding:20px;
 	margin:15px; 
-	background-color: rgb(249, 255, 242);
+	background-color: rgba(214,186,142,0.49);
 	border-radius: 8px;
 	box-shadow:15px 15px 10px #000000;
-	background-image: linear-gradient(0deg, rgba(214,186,142,0.49) 49%, #720D0D 58%);
 }
 .titleSubmit{
 	width:130px;
@@ -74,23 +101,17 @@ form{
 #logout {
 
 }
-.hiThere, .punt {
-	right: -100px;
-	position: absolute;
-	margin-top: 300px;
-	font-style: italic;
-}
+
 .logReg{
-/*	background-color: #E4C8C8 !important;*/
+
 	border-radius: 8px;
-	/*margin-top: 100px;*/
 	width: 300px;
 	padding:20px;
 	top:-500px;
-	left:35%;
+	right:48%;
 	opacity: 80%;
 	position: absolute;
-	box-shadow:15px 15px 10px #888888;
+	box-shadow:15px 15px 10px #000000;
 
 background-image: linear-gradient(0deg, rgba(214,186,142,0.49) 49%, #720D0D 58%);
 }
@@ -109,7 +130,7 @@ input select {
 }
 .post.container-fluid {
 	background-color:rgba(156, 208, 220, 0.28);
-	/*padding: 0 0 0 0 !important;*/
+
 
 }
 .containerFluid1 {
@@ -118,9 +139,12 @@ input select {
 }
 .well {
 	padding:0px !important;
-
+	box-shadow:-15px -15px -10px #000000;
+	background-color: #fff !important;
 }
-body {
-background-image: radial-gradient(49% 214%, rgba(214,186,142,0.49) 50%, #000000 100%) !important;
-background-image: radial-gradient(49% 214%, rgba(214,186,142,0.49) 50%, #000000 100%) !important;
+
+.logMessage {
+	position: absolute;
+	bottom: 20%;
+	left:-100px;
 }

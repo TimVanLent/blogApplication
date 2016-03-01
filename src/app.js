@@ -70,10 +70,9 @@ app.get('/', function(req, res) {
 	Promise.all([ //
 		Blog.findAll(),
 		User.findAll(),
-		Comment.findAll()
 	]).then(function(entities) {
 
-		var blogs = entities[0].map(function(row) {
+		var data = entities[0].map(function(row) {
 
 			return {
 				id: row.dataValues.id,
@@ -81,8 +80,10 @@ app.get('/', function(req, res) {
 				title: row.dataValues.title,
 				userId: row.dataValues.userId
 			};
+		
 		});
-
+		
+		var blogs = data.reverse()
 		var users = entities[1].map(function(row) {
 			return {
 				id: row.dataValues.id,
@@ -92,19 +93,9 @@ app.get('/', function(req, res) {
 			};
 		});
 
-		var comments = entities[2].map(function(row) {
-			return {
-				id: row.dataValues.id,
-				comment: row.dataValues.comment,
-				userId: row.dataValues.userId,
-				blogId: row.dataValues.blogId
-			};
-		});
-
 		res.render('index', {
 			blogs: blogs,
 			users: users,
-			comments : comments,
 			message: req.query.message,
 			user: req.session.user
 		});
@@ -226,6 +217,8 @@ app.post('/register', bodyParser.urlencoded({
 	}).then(function(user) {
 
 		res.redirect('/?message=' + encodeURIComponent("Sup " + req.body.addUser));
+	},function (error) {
+		res.redirect('/?message=' + encodeURIComponent("Username already exists"));
 	});
 });
 //----------------------------------------------------------

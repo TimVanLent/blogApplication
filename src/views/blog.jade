@@ -7,30 +7,30 @@ html
 		if user
 			.nav.navbar.navbar-default( role="navigation" )
 				.navbar-header.col-md-2
-					h5 sup dude
+					h5.head sup dude
 				.active.col-md-8
 					a#logout(href='/logout')
-						h5 don't log out	
+						h5.head don't log out	
 				.active.col-md-2
-					h5 logged in as #{user.username}
+					h5.head logged in as #{user.username}
 			.container
 				.row
 					.col-md-5.col-sm-6.col-xs-12
 						.col-md-12
-							h3 write a message!
+							h3#blogText write a message!
 							form(action = '/blogs' method='post')
 								input#title(placeholder='title' name='title')
 								input.bodySubmit(placeholder='body' name='body')
 								input.titleSubmit(type='submit' value='post' class='postButton')
 						.col-md-12
-							h3 my messages
+							h3#mineText my messages
 							each blog in blogs
 								if(blog.userId == user.username)
 									.well
 										.post.container-fluid
 											a(id= blog.id, href="/blog/" + blog.id + '#' + blog.id) 
 												h4= blog.title	
-											h5(id=blog.body)= blog.body
+											h5(class='blogbody')= blog.body
 											h6#ref= " - " + blog.userId
 											br
 										.comment.container-fluid
@@ -42,42 +42,40 @@ html
 														input(type='submit' value='post')
 												else
 													each comment in comments
-														p(id=comment.comment)= comment.userId +' ' + 'says: ' + " "+ comment.comment
+														p(class='blogbody')= comment.userId +' ' + 'says: ' + " "+ comment.comment
 													form(action = '/comment' method='post')
 														input(placeholder='title' name='comment')
 														input(type='submit' value='post')
 					.col-md-4.col-sm-6.col-xs-12
-						h3 latest activity..
-						for(var i=0, i<blogs.length, i++)
-							if(i=1)
-								.well
-									.post.container-fluid
-										a(id= blogs[i].id + "latest", href="/blog/" + blogs[i].id + '#' + blogs[i].id + "latest") 
-												h5= blogs[i].title
-											h5(id=blogs[i].body)= blogs[i].body
-											h6#ref= " - " + blogs[i].userId
-											br
-									.comment.container-fluid
-										if(blogs[i].id == blogID)
-											if(comments == 'no comments')
-												em write a reaction
-												form(action = '/comment' method='post')
-													input(placeholder='title' name='comment')
-													input(type='submit' value='post')
-											else
-												each comment in comments
-													p(id=comment.comment)= comment.userId +' ' + 'says: ' + " "+ comment.comment
-												form(action = '/comment' method='post')
-													input(placeholder='title' name='comment')
-													input(type='submit' value='post')										
-						h3 not my messages..
+						h3#activityText latest Post..
+						.well
+							.post.container-fluid
+								a(id= blogs[0].id + "latest", href="/blog/" + blogs[0].id + '#' + blogs[0].id + "latest") 
+										h5= blogs[0].title
+									h5(class='blogbody')= blogs[0].body
+									h6#ref= " - " + blogs[0].userId
+									br
+							.comment.container-fluid
+								if(blogs[0].id == blogID)
+									if(comments == 'no comments')
+										em write a reaction
+										form(action = '/comment' method='post')
+											input(placeholder='title' name='comment')
+											input(type='submit' value='post')
+									else
+										each comment in comments
+											p(class='blogbody')= comment.userId +' ' + 'says: ' + " "+ comment.comment
+										form(action = '/comment' method='post')
+											input(placeholder='title' name='comment')
+											input(type='submit' value='post')										
+						h3#otherText not my messages..
 						each blog in blogs
-							if(blog.userId !== user.username)
+							if(blog.userId !== user.username && blog.id !== blogs.length)
 								.well
 									.post.container-fluid
 										a(id= blog.id, href="/blog/" + blog.id + '#' + blog.id) 
 											h5= blog.title
-										h5(id=blog.body)= blog.body
+										h5(class='blogbody')= blog.body
 										h6#ref= " - " + blog.userId
 										br
 									.comment.container-fluid
@@ -89,17 +87,16 @@ html
 													input(type='submit' value='post')
 											else
 												each comment in comments
-													p(id=comment.comment)= comment.userId +' ' + 'says: ' + " "+ comment.comment
+													p(class='blogbody')= comment.userId +' ' + 'says: ' + " "+ comment.comment
 												form(action = '/comment' method='post')
 													input(placeholder='title' name='comment')
 													input(type='submit' value='post')
-
 					.col-md-2.col-sm-6.col-xs-12
-						h3 Bloglist
+						h3#listText Bloglist
 						br
 						each blog in blogs
 							- var x = '#' + blog.id
 							a(href= "/blog/" + blog.id + x)
-								h5= blog.title + " - " 
+								h5= blog.title
 								h6#ref= " - " + blog.userId
 								br
